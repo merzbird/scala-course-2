@@ -57,7 +57,7 @@ trait StringParserTerrain extends GameDef {
       try {
         !levelVector(p.row)(p.col).equals('-')
       } catch {
-        case e: IndexOutOfBoundsException => false
+        case _: IndexOutOfBoundsException => false
       }
     }
 
