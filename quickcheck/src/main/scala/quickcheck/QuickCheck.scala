@@ -29,23 +29,29 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     findMin(h) == a
   }
 
-  property("min2") = forAll { (a1: Int, a2: Int)  =>
+  property("min2") = forAll { (a1: Int, a2: Int) =>
     val min = findMin(insert(a2, insert(a1, empty)))
     min == a1 || min == a2
   }
 
-  property("min3") = forAll { (h1: H, h2: H)  =>
+  property("min3") = forAll { (h1: H, h2: H) =>
     val melded = meld(h1, h2)
     isEmpty(melded) || !isEmpty(h1) && findMin(melded) == findMin(h1) || !isEmpty(h2) && findMin(melded) == findMin(h2)
   }
 
-  property("delete") = forAll { a: Int  =>
+  property("delete") = forAll { a: Int =>
     isEmpty(deleteMin(insert(a, empty)))
   }
 
   property("sorted") = forAll { h: H =>
     def checkMin(h: H, m: A): Boolean = isEmpty(h) || findMin(h) >= m && checkMin(deleteMin(h), findMin(h))
-    isEmpty(h) || checkMin(h, findMin(h))
+
+    isEmpty(h) || checkMin(deleteMin(h), findMin(h))
+  }
+
+  property("min4") = forAll { a: Int =>
+    val b = a / 2
+    deleteMin(insert(b + 1, insert(b, insert(b + 2, empty)))) == insert(b + 2, insert(b + 1, empty))
   }
 
 }
